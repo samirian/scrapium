@@ -8,6 +8,7 @@ class Scraper(Selenium_Scraper):
         Selenium_Scraper.__init__(self)
 
     def run(self):
+        print('Hi, I am the scraper class and I run in a separate process.')
         super().run()
         self.open_url("https://free-proxy-list.net/")
         self.click_element_by_xpath('/html/body/section[1]/div/div[2]/div/div[1]/div[1]/div/label/select/option[3]')
@@ -41,3 +42,4 @@ if __name__ == "__main__":
     """
     scraper = Scraper()
     scraper.execute()
+    print('Hi, I am the main process and continued nonblocking.')

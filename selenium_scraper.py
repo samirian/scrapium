@@ -7,7 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 import time
-import re
 import csv
 
 
@@ -94,6 +93,16 @@ class Selenium_Scraper(Process):
     def wait_for_element_visibility(self, xpath: str):
         self.wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
 
+    def send_keys_to_element(self, xpath: str, keys: str):
+        """Fill in the element with the given keys string.
+        """
+        self.driver.find_element_by_xpath(xpath).send_keys(keys)
+
+    def send_keys_using_actions(self, xpath: str, keys: str):
+        """Fill in the vurrently selected element with the given keys string.
+        """
+        self.actions.send_keys(keys)
+
     def run(self):
         driver, wait, actions = self.__get_driver_wait_actions()
         self.driver = driver
@@ -101,9 +110,8 @@ class Selenium_Scraper(Process):
         self.actions= actions
 
     def execute(self, *args):
-        """This takes form you.
-
-        Yeah that is real.
+        """This function should be overriden to pass custom argmunts to the
+        run function.
+        Example : self.arg1 = args[0]
         """
-        # example : self.arg1 = args[0]
         self.start()
