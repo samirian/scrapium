@@ -10,7 +10,7 @@ class Scraper(Selenium_Scraper):
     def run(self):
         print('Hi, I am the scraper class and I run in a separate process.')
         super().run()
-        self.open_url("https://free-proxy-list.net/")
+        self.open_url("https://free-proxy-list.net/", 3)
         self.click_element_by_xpath('/html/body/section[1]/div/div[2]/div/div[1]/div[1]/div/label/select/option[3]')
         self.click_element_by_xpath('//*[@id="proxylisttable"]/tfoot/tr/th[7]/select/option[3]')
         csv_writer, csv_file = self.get_csv_file_writer('proxy_list', ['ip', 'port', 'country'], 'w')
@@ -34,7 +34,8 @@ class Scraper(Selenium_Scraper):
 
     def execute(self, *args):
         self.set_proxy('170.79.16.19', '8080')
-        self.set_timeout(60)
+        self.set_page_load_timeout(60)
+        self.set_wait_timeout(5)
         super().execute(*args)
 
 if __name__ == "__main__":
