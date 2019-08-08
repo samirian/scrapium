@@ -5,6 +5,7 @@ This project is a base class which is composed of Selenium_Scraper class, this c
 ## Getting Started
 
 Just clone the repo and and import Selenium_Scraper to you project from selenium_scraper.py file then inherit Selenium_Scraper class as shown in the example attached.
+for full documentation see: https://samirian.github.io/selenium-scraper-base-class/
 
 ### Prerequisites
 
