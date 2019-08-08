@@ -31,8 +31,11 @@ class Scraper(Selenium_Scraper):
         csv_file.close()
         self.driver.close()
 
-
     def execute(self, *args):
+        """This function should be overriden to pass custom arguments to the
+        run function and also to set up the options.
+        Example : self.arg1 = args[0]
+        """
         self.set_proxy('170.79.16.19', '8080')
         self.set_page_load_timeout(60)
         self.set_wait_timeout(5)
