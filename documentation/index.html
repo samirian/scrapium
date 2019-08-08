@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Api documentation - Selenium Scraper</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Api documentation";
+    var mkdocs_page_input_path = "documentation.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Selenium Scraper</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Api documentation</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#selenium_scraper">Selenium_Scraper</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../about/">About</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Selenium Scraper</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Api documentation</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="selenium_scraper">Selenium_Scraper</h1>
+<pre><code class="python">class Selenium_Scraper()
+</code></pre>
+
+<blockquote>
+<pre><code>open_url(url: str, trials: int = 1) -&gt; bool
+</code></pre>
+<p>Loads a page of a given url.</p>
+<blockquote>
+<ul>
+<li><strong>url</strong>: The url to be loaded.</li>
+<li><strong>trials</strong>: The maximum number of trials before the fucntion raise <strong>TimeoutException</strong>.</li>
+</ul>
+</blockquote>
+<pre><code>set_page_load_timeout(timeout: int)
+</code></pre>
+<p>Sets the timeout of page loading.</p>
+<blockquote>
+<ul>
+<li><strong>timeout</strong>: The maximum duration in seconds that the driver must wait when loading a page before it raise <strong>TimeoutException</strong>.</li>
+</ul>
+</blockquote>
+<pre><code>set_wait_timeout(timeout: int)
+</code></pre>
+<p>Sets the timeout of waiting for element to be visible.</p>
+<blockquote>
+<ul>
+<li><strong>timeout</strong>: The maximum duration in seconds that the driver wait must wait before it raise <strong>TimeoutException</strong>.</li>
+</ul>
+</blockquote>
+<pre><code>set_proxy(ip: str, port: str)
+</code></pre>
+<p>Sets a proxy for the driver.</p>
+<blockquote>
+<ul>
+<li><strong>ip</strong>: The ip of the proxy server.</li>
+<li><strong>port</strong>: The port of the proxy server.</li>
+</ul>
+</blockquote>
+<pre><code>set_default_download_directory(directory: str)
+</code></pre>
+<p>Sets the default download directory so that when a link is opened, it is downloaded in the default directory automatically.</p>
+<blockquote>
+<ul>
+<li><strong>directory</strong>: The default download directory.</li>
+</ul>
+</blockquote>
+<pre><code>wait_for_element_visibility(xpath: str)
+</code></pre>
+<p>Waits for element indicated by the given xpath to be cisible for the previously set wait timeout, if not set its default value is 10 secs.</p>
+<blockquote>
+<ul>
+<li><strong>xpath</strong>: The xpath of the element to wait for its visibility.</li>
+</ul>
+</blockquote>
+<pre><code>click_element_by_xpath(xpath: str)
+</code></pre>
+<p>Directly clicks the element given by the xpath.</p>
+<blockquote>
+<ul>
+<li><strong>xpath</strong>: The xpath of the element to be clicked.</li>
+</ul>
+</blockquote>
+<pre><code>click_element_by_xpath_using_actions(xpath: str)
+</code></pre>
+<p>Moves to the element position then clicks it, this is espicially useful when there is other element appearing on the screen (blocking the element we want to click from being directly clicked means that the click will be intercepted by the blocking element).</p>
+<blockquote>
+<ul>
+<li><strong>xpath</strong>: The xpath of the element to be clicked.</li>
+</ul>
+</blockquote>
+<pre><code>get_text_from_element_by_xpath(xpath: str)
+</code></pre>
+<p>Gets the text from an element given by the xpath.</p>
+<blockquote>
+<ul>
+<li><strong>xpath</strong>: The xpath of the element to get text from.</li>
+</ul>
+</blockquote>
+<pre><code>clear_element_text(xpath: str)
+</code></pre>
+<p>Clear element given by xpath from it text, this is espicially useful when trying to clear text from input element and then insert other text to it.</p>
+<blockquote>
+<ul>
+<li><strong>xpath</strong>: The xpath of the element to clear its text.</li>
+</ul>
+</blockquote>
+<pre><code>send_keys_to_element(xpath: str, keys: str)
+</code></pre>
+<p>Inserts the text given by the keys to an element given by the xpath.</p>
+<blockquote>
+<ul>
+<li><strong>xpath</strong>: The xpath of the element to insert text to.</li>
+</ul>
+</blockquote>
+<pre><code>send_keys_using_actions(xpath: str, keys: str)
+</code></pre>
+<p>Inserts the text given by the keys to an element given by the xpath, this is espicially useful when there is other element appearing on the screen (blocking the element we want to send text to from directly recieving that text means that the text sent will be intercepted by the blocking element).</p>
+<blockquote>
+<ul>
+<li><strong>xpath</strong>: The xpath of the element to insert text to.</li>
+</ul>
+</blockquote>
+<pre><code>get_csv_file_reader(filename: str) -&gt; csv.DictReader
+</code></pre>
+<p>Opens the csv file and gets csv file reader.</p>
+<blockquote>
+<ul>
+<li><strong>filename</strong>: The name of the csv file to be opened.</li>
+</ul>
+</blockquote>
+<pre><code>get_csv_file_writer(filename: str, fieldnames: list, previlage: str) -&gt; (csv.DictWriter, open)
+</code></pre>
+<p>Open the csv file with the specified privillage and writes the header with the given fieldnames then returns csv file writer and the csv file.</p>
+<blockquote>
+<ul>
+<li><strong>filename</strong>: The csv filename.</li>
+<li><strong>fieldnames</strong>: The field names (names of the coulmns in the csv file).</li>
+<li><strong>previlage</strong>: The file previlage ('w' for creating new file, and 'a' for appending to an existing file).</li>
+</ul>
+</blockquote>
+<pre><code>run()
+</code></pre>
+<p>Contains the main code that will run in a separate process.</p>
+<pre><code>execute(*args)
+</code></pre>
+<p>This function should be overriden to pass custom arguments to the run function and also to set up the options.</p>
+<blockquote>
+<ul>
+<li><strong>args</strong>: A list containing all the arguments passed to the function.</li>
+</ul>
+</blockquote>
+</blockquote>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../about/" class="btn btn-neutral float-right" title="About">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../about/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
