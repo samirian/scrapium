@@ -16,12 +16,13 @@ class Selenium_Scraper(Process):
         Process.__init__(self)
         self.proxy              = None
         self.download_directory = None
+        self.driver_path        = None
         self.page_load_timeout  = 0
         self.wait_timeout       = 10
         self.driver             = None
         self.wait               = None
 
-    def __get_options(self) -> webdriver.ChromeOptions:
+    def get_options(self) -> webdriver.ChromeOptions:
         chrome_options  = webdriver.ChromeOptions()
         prefs           = {}
         if self.download_directory != None:
@@ -31,17 +32,20 @@ class Selenium_Scraper(Process):
         chrome_options.add_experimental_option("prefs", prefs)
         return chrome_options
 
-    def __get_driver(self) -> webdriver.Chrome:
-        options = self.__get_options()
-        driver  = webdriver.Chrome(options=options)
+    def get_driver(self) -> webdriver.Chrome:
+        options = self.get_options()
+        if self.driver_path != None:
+            driver  = webdriver.Chrome(options=options, executable_path=self.driver_path)
+        else:
+            driver = webdriver.Chrome(options=options)
         if self.page_load_timeout != 0:
             driver.set_page_load_timeout(self.page_load_timeout)
         return driver
 
-    def __get_wait(self) -> WebDriverWait:
+    def get_wait(self) -> WebDriverWait:
         return WebDriverWait(self.driver, self.wait_timeout)
 
-    def __get_actions(self) -> ActionChains:
+    def get_actions(self) -> ActionChains:
         return ActionChains(self.driver)
 
     def open_url(self, url: str, trials: int = 1) -> bool:
@@ -80,6 +84,11 @@ class Selenium_Scraper(Process):
         """Sets the default download directory.
         """
         self.download_directory = directory
+
+    def set_driver_executable_path(self, path: str):
+        """Sets the driver executable path.
+        """
+        self.driver_path = path
 
     def wait_for_element_visibility(self, xpath: str):
         self.wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
@@ -134,9 +143,9 @@ class Selenium_Scraper(Process):
         return writer, csv_file
 
     def run(self):
-        self.driver = self.__get_driver()
-        self.wait   = self.__get_wait()
-        self.actions= self.__get_actions()
+        self.driver = self.get_driver()
+        self.wait   = self.get_wait()
+        self.actions= self.get_actions()
 
     def execute(self, *args):
         """This function should be overriden to pass custom arguments to the
