@@ -1,11 +1,11 @@
 from selenium_scraper import Selenium_Scraper
 
 class Scraper(Selenium_Scraper):
-    def __init__(self):
+    def __init__(self, driver_name):
         """This class scraps the first 80 https proxies available on 
         the website : "https://free-proxy-list.net/"
         """
-        Selenium_Scraper.__init__(self)
+        Selenium_Scraper.__init__(self, driver_name)
 
     def run(self):
         print('Hi, I am the scraper class and I run in a separate process.')
@@ -29,21 +29,21 @@ class Scraper(Selenium_Scraper):
         except:
             pass
         csv_file.close()
-        self.driver.close()
+        self.options.terminate()
 
     def execute(self, *args):
         """This function should be overriden to pass custom arguments to the
         run function and also to set up the options.
         Example : self.arg1 = args[0]
         """
-        self.set_proxy('170.79.16.19', '8080')
-        self.set_page_load_timeout(60)
-        self.set_wait_timeout(5)
+        self.options.set_proxy('186.225.63.134', '38459')
+        self.options.set_page_load_timeout(60)
+        self.options.set_wait_timeout(5)
         super().execute(*args)
 
 if __name__ == "__main__":
     """This is just an example to show how to use Selenium_Scraper class.
     """
-    scraper = Scraper()
+    scraper = Scraper('chrome')
     scraper.execute()
     print('Hi, I am the main process and continued nonblocking.')

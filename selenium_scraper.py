@@ -9,18 +9,26 @@ from selenium.common.exceptions import TimeoutException
 import csv
 
 
-class Selenium_Scraper(Process):
+class Chrome_Options:
     def __init__(self):
-        """Creates a process that includes a chromedriver.
-        """
-        Process.__init__(self)
         self.proxy              = None
         self.download_directory = None
+        self.headless           = False
         self.driver_path        = None
+        self.wait_timeout       = 20
         self.page_load_timeout  = 0
-        self.wait_timeout       = 10
-        self.driver             = None
-        self.wait               = None
+
+    def initiate(self):
+        """Returns new driver, wait and actions.
+        """
+        self.driver = self.get_driver(self.driver_path, self.page_load_timeout)
+        self.wait   = self.get_wait(self.driver, self.wait_timeout)
+        self.actions= self.get_actions(self.driver)
+
+    def terminate(self):
+        """Closes currently opened drivers and performs the cleanup.
+        """
+        self.driver.close()
 
     def get_options(self) -> webdriver.ChromeOptions:
         chrome_options  = webdriver.ChromeOptions()
@@ -29,24 +37,86 @@ class Selenium_Scraper(Process):
             prefs["download.default_directory"] = self.download_directory
         if self.proxy != None:
             chrome_options.add_argument('--proxy-server=%s' % self.proxy)
+        if self.headless:
+            chrome_options.add_argument('--headless')
         chrome_options.add_experimental_option("prefs", prefs)
         return chrome_options
 
-    def get_driver(self) -> webdriver.Chrome:
+    def get_driver(self, driver_path:str=None, page_load_timeout: int=0) -> webdriver.Chrome:
         options = self.get_options()
-        if self.driver_path != None:
-            driver  = webdriver.Chrome(options=options, executable_path=self.driver_path)
+        if driver_path != None:
+            driver = webdriver.Chrome(options=options, executable_path=driver_path)
         else:
             driver = webdriver.Chrome(options=options)
-        if self.page_load_timeout != 0:
-            driver.set_page_load_timeout(self.page_load_timeout)
+        if page_load_timeout != 0:
+            driver.set_page_load_timeout(page_load_timeout)
         return driver
 
-    def get_wait(self) -> WebDriverWait:
-        return WebDriverWait(self.driver, self.wait_timeout)
+    def get_wait(self, driver: webdriver.Chrome, wait_timeout: int) -> WebDriverWait:
+        return WebDriverWait(driver, wait_timeout)
 
-    def get_actions(self) -> ActionChains:
-        return ActionChains(self.driver)
+    def get_actions(self, driver: webdriver.Chrome) -> ActionChains:
+        return ActionChains(driver)
+
+    def set_page_load_timeout(self, timeout: int):
+        """Sets a page loading and driver wait timeout in seconds.
+        """
+        self.page_load_timeout = timeout
+        try:
+            self.driver.set_page_load_timeout(self.page_load_timeout)
+            return True
+        except:
+            return False
+
+    def set_wait_timeout(self, timeout: int):
+        """Sets a timeout for the driver wait class in seconds.
+        """
+        self.wait_timeout = timeout
+        try:
+            self.wait = self.get_wait(self.driver, self.wait_timeout)
+            return True
+        except:
+            return False
+
+    def set_proxy(self, ip: str, port: str):
+        """Sets the proxy.
+
+        The proxy can be set only before initiating a driver.
+        """
+        self.proxy = ip + ':' + port
+
+    def set_default_download_directory(self, directory: str):
+        """Sets the default download directory.
+
+        The default download directory can be set only before initiating a driver.
+        """
+        self.download_directory = directory
+
+    def set_driver_executable_path(self, path: str):
+        """Sets the driver executable path.
+
+        The driver executable path can be set only before initiating a driver.
+        """
+        self.driver_path = path
+
+    def set_headless(self, headless: bool):
+        """Set the headless state.
+
+        The headless state can be set only before initiating a driver.
+        """
+        self.headless = headless
+
+
+
+class Selenium_Scraper(Process):
+    def __init__(self, driver_name: str):
+        """Creates a process that includes a driver.
+
+        driver_name = 'chrome' -> chromedriver
+        """
+        Process.__init__(self)
+        if driver_name == 'chrome':
+            self.options            = Chrome_Options()
 
     def open_url(self, url: str, trials: int = 1) -> bool:
         """Tries to open the url page for trials times.
@@ -61,34 +131,6 @@ class Selenium_Scraper(Process):
             except TimeoutException:
                 pass
         return False
-
-    def set_page_load_timeout(self, timeout: int):
-        """Sets a page loading and driver wait timeout in seconds.
-        """
-        self.page_load_timeout = timeout
-        if self.driver != None:
-            self.driver.set_page_load_timeout(self.page_load_timeout)
-
-    def set_wait_timeout(self, timeout: int):
-        """Sets a timeout for the driver wait class in seconds.
-        """
-        self.wait_timeout = timeout
-        self.wait = WebDriverWait(self.driver, self.wait_timeout)
-
-    def set_proxy(self, ip: str, port: str):
-        """Sets the proxy.
-        """
-        self.proxy = ip + ':' + port
-
-    def set_default_download_directory(self, directory: str):
-        """Sets the default download directory.
-        """
-        self.download_directory = directory
-
-    def set_driver_executable_path(self, path: str):
-        """Sets the driver executable path.
-        """
-        self.driver_path = path
 
     def wait_for_element_visibility(self, xpath: str):
         self.wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
@@ -128,6 +170,40 @@ class Selenium_Scraper(Process):
         self.wait_for_element_visibility(xpath)
         self.actions.send_keys(keys)
 
+    def extractor(self, element) -> list:
+        parsed_element = None
+        if type(element) == list:
+            parsed_element = []
+            for item in element:
+                parsed_element.append(self.extractor(item))
+        elif type(element) == dict:
+            parsed_element = {}
+            for key, value in element.items():
+                parsed_element[key] = self.extractor(value)
+        elif type(element) == str:
+            parsed_element = self.get_text_from_element_by_xpath(element)
+        return parsed_element
+
+    def extract(self, element: dict) -> str:
+        """Extracts the text according to the givien dict xpahs.
+        
+        elements is in the form of {
+            'key1' : 'xpath1',
+            'key2' : {
+                'key3' : 'xpath3',
+                'key4' : 'xpath4',
+            },
+            'key5' : [
+                {
+                    'key6' : 'xpath6',
+                },
+            ]
+        }
+        """
+        if type(element) != dict:
+            return None
+        return extractor(element)
+
     def get_csv_file_reader(self, filename: str) -> csv.DictReader:
         """Opens csv file and returns the csv reader.
         """
@@ -142,10 +218,26 @@ class Selenium_Scraper(Process):
         writer.writeheader()
         return writer, csv_file
 
+    def set_state_parameters(state_filename: str, state_fieldnames: list):
+        pass
+
+    def save_state(self, *args):
+        self.fieldnames
+        state = {}
+        for arg, fieldname in zip(args, self.fieldname):
+            state[fieldname] = arg
+
+    def load_state(self):
+        pass
+
+    def initiate(self):
+        self.options.initiate()
+        self.driver = self.options.driver
+        self.wait   = self.options.wait
+        self.actions= self.options.actions
+
     def run(self):
-        self.driver = self.get_driver()
-        self.wait   = self.get_wait()
-        self.actions= self.get_actions()
+        self.initiate()
 
     def execute(self, *args):
         """This function should be overriden to pass custom arguments to the
