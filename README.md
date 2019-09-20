@@ -20,4 +20,4 @@ Second you have to install chromedriver, you can find the version that suits you
 I have attached and example you can run it to see how it goes.
 
 ## Donation
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](PayPal.Me/abdallahaboelela)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/abdallahaboelela)
