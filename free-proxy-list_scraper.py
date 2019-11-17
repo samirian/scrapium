@@ -1,11 +1,11 @@
-from selenium_scraper import Selenium_Scraper
+from scrapium import Scrapium
 
-class Scraper(Selenium_Scraper):
+class Scraper(Scrapium):
     def __init__(self, driver_name):
         """This class scraps the first 80 https proxies available on 
         the website : "https://free-proxy-list.net/"
         """
-        Selenium_Scraper.__init__(self, driver_name)
+        super().__init__(driver_name)
 
     def run(self):
         print('Hi, I am the scraper class and I run in a separate process.')
@@ -36,7 +36,7 @@ class Scraper(Selenium_Scraper):
         run function and also to set up the options.
         Example : self.arg1 = args[0]
         """
-        self.options.set_proxy('186.225.63.134', '38459')
+        # self.options.set_proxy('186.225.63.134', '38459')
         self.options.set_page_load_timeout(60)
         self.options.set_wait_timeout(5)
         super().execute(*args)
