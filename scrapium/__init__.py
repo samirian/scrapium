@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 import csv
 from openpyxl import Workbook
-from samir.scrapium.chrome_options import Chrome_Options
+from .chrome_options import Chrome_Options
 
 
 class Scrapium(Process):
