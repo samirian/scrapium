@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 import csv
 from openpyxl import Workbook
-from .chrome_options import Chrome_Options
+from samir.scrapium.chrome_options import Chrome_Options
 
 
 class Scrapium(Process):
@@ -40,8 +40,16 @@ class Scrapium(Process):
 	def new_tab(self):
 		self.driver.execute_script('window.open("","_blank");')
 
-	def jump_to_tap(self, tab_index: int):
+	def jumb_to_tab(self, tab_index: int):
 		self.driver.switch_to.window(self.driver.window_handles[tab_index])
+
+	def close_tab(self, tab_index: int):
+		self.jumb_to_tab(tab_index)
+		self.driver.close()
+		try:
+			self.jumb_to_tab(tab_index - 1)
+		except:
+			pass
 
 	def wait_for_element_visibility(self, xpath: str):
 		self.wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))

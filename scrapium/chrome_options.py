@@ -7,6 +7,7 @@ class Chrome_Options:
     def __init__(self):
         self.proxy              = None
         self.download_directory = None
+        self.download_prompt    = None
         self.headless           = False
         self.driver_path        = None
         self.wait_timeout       = 20
@@ -30,6 +31,8 @@ class Chrome_Options:
         prefs           = {}
         if self.download_directory != None:
             prefs["download.default_directory"] = self.download_directory
+        if self.download_prompt != None:
+            prefs["download.prompt_for_download"] = self.download_prompt
         if self.proxy != None:
             chrome_options.add_argument('--proxy-server=%s' % self.proxy)
         if self.headless:
@@ -88,6 +91,11 @@ class Chrome_Options:
         The default download directory can be set only before initiating a driver.
         """
         self.download_directory = directory
+
+    def set_download_prompt(self, download_prompt: bool):
+        """Sets the download prompt
+        """
+        self.download_prompt = download_prompt
 
     def set_driver_executable_path(self, path: str):
         """Sets the driver executable path.
